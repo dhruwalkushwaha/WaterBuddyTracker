@@ -23,6 +23,12 @@ interface SimpleData {
   streak: number;
   achievements: string[];
   theme: "light" | "dark";
+  history?: Array<{
+    date: string;
+    waterIntake: number;
+    goodbugTaken: boolean;
+    goalMet: boolean;
+  }>;
 }
 
 const initialData: SimpleData = {
@@ -34,6 +40,7 @@ const initialData: SimpleData = {
   streak: 0,
   achievements: [],
   theme: "light",
+  history: [],
 };
 
 export default function HomeSimple() {
@@ -159,6 +166,7 @@ export default function HomeSimple() {
           <div className="max-w-md mx-auto px-4 py-4 flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Droplets className="text-2xl" style={{ color: 'var(--water-color)' }} />
+              <span className="text-2xl">🦠</span>
               <h1 className="text-xl font-bold">GoodSip GoodBug</h1>
             </div>
             <div className="flex items-center space-x-3">

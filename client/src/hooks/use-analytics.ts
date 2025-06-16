@@ -22,13 +22,16 @@ export interface MonthlyStats {
 }
 
 export function useAnalytics(data: HydrationData) {
-  // Get current day data
-  const todayData: DayData = useMemo(() => ({
-    date: data.lastDate,
-    waterIntake: data.waterIntake,
-    probioticTaken: data.probioticTaken,
-    goalMet: data.waterIntake >= data.dailyGoal,
-  }), [data.lastDate, data.waterIntake, data.probioticTaken, data.dailyGoal]);
+  // Get current day data - check if GoodBug was taken today
+  const todayData: DayData = useMemo(() => {
+    const goodbugTaken = data.goodbugTaken || false;
+    return {
+      date: data.lastDate,
+      waterIntake: Number(data.waterIntake) || 0,
+      medicationsTaken: goodbugTaken ? [{ medicationId: 'goodbug', timesTaken: ['today'], completed: true }] : [],
+      goalMet: Number(data.waterIntake) >= Number(data.dailyGoal),
+    };
+  }, [data.lastDate, data.waterIntake, data.goodbugTaken, data.dailyGoal]);
 
   // Combine history with today's data
   const allData = useMemo(() => {
@@ -72,7 +75,9 @@ export function useAnalytics(data: HydrationData) {
       if (weekData.length > 0) {
         const totalWater = weekData.reduce((sum, day) => sum + day.waterIntake, 0);
         const goalMetDays = weekData.filter(day => day.goalMet).length;
-        const probioticDays = weekData.filter(day => day.probioticTaken).length;
+        const probioticDays = weekData.filter(day => 
+          day.medicationsTaken && day.medicationsTaken.some(med => med.medicationId === 'goodbug' && med.completed)
+        ).length;
         
         weeks.push({
           weekStartDate: weekStart.toDateString(),
