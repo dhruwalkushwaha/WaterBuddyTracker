@@ -88,6 +88,7 @@ export function useHydration() {
     
     setData(prev => {
       const newAchievements = [...prev.achievements];
+      const newHistory = [...prev.history];
       const percentage = (newIntake / prev.dailyGoal) * 100;
       const milestones = [25, 50, 75, 100];
       
@@ -119,22 +120,60 @@ export function useHydration() {
         setShowToast({ message: "Achievement unlocked: Night Owl! 🦉", type: 'achievement' });
       }
       
+      // Update today's data in history
+      const todayData = {
+        date: prev.lastDate,
+        waterIntake: newIntake,
+        probioticTaken: prev.probioticTaken,
+        goalMet: newIntake >= prev.dailyGoal,
+      };
+      
+      const existingIndex = newHistory.findIndex(day => day.date === prev.lastDate);
+      if (existingIndex >= 0) {
+        newHistory[existingIndex] = todayData;
+      } else {
+        newHistory.push(todayData);
+      }
+      
       return {
         ...prev,
         waterIntake: newIntake,
         achievements: newAchievements,
+        history: newHistory,
       };
     });
-  }, [data.glassSize, data.waterIntake, data.dailyGoal, setData]);
+  }, [data.glassSize, data.waterIntake, data.dailyGoal, data.lastDate, data.probioticTaken, setData]);
 
   // Toggle probiotic
   const toggleProbiotic = useCallback(() => {
     setData(prev => {
       const newTaken = !prev.probioticTaken;
+      const newHistory = [...prev.history];
+      
       if (newTaken) {
         setShowToast({ message: "Good job taking your GoodBug! 🦠✨", type: 'success' });
       }
-      return { ...prev, probioticTaken: newTaken };
+      
+      // Update today's data in history
+      const todayData = {
+        date: prev.lastDate,
+        waterIntake: prev.waterIntake,
+        probioticTaken: newTaken,
+        goalMet: prev.waterIntake >= prev.dailyGoal,
+      };
+      
+      const existingIndex = newHistory.findIndex(day => day.date === prev.lastDate);
+      if (existingIndex >= 0) {
+        newHistory[existingIndex] = todayData;
+      } else {
+        newHistory.push(todayData);
+      }
+      
+      return { 
+        ...prev, 
+        probioticTaken: newTaken,
+        history: newHistory,
+      };
     });
   }, [setData]);
 

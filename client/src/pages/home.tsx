@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Settings, Droplets, Moon, Sun, Award, Pill } from 'lucide-react';
+import { Settings, Droplets, Moon, Sun, Award, Pill, TrendingUp } from 'lucide-react';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -67,6 +68,11 @@ export default function Home() {
               <h1 className="text-xl font-bold">GoodSip GoodBug</h1>
             </div>
             <div className="flex items-center space-x-3">
+              <Link href="/analytics">
+                <Button variant="ghost" size="icon" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <TrendingUp className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                </Button>
+              </Link>
               <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="icon" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
