@@ -280,7 +280,7 @@ export default function Analytics() {
                         </div>
                       </CardContent>
                     </Card>
-                  )) : null}
+                  )) : []}
                 </div>
               </>
             ) : (
