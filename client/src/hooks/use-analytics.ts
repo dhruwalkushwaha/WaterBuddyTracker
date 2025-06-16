@@ -164,7 +164,7 @@ export function useAnalytics(data: HydrationData) {
 
   // Overall statistics
   const overallStats = useMemo(() => {
-    if (allData.length === 0) {
+    if (!allData || allData.length === 0) {
       return {
         totalDays: 0,
         averageDaily: 0,

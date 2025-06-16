@@ -12,7 +12,8 @@ import { useLocation } from 'wouter';
 export default function Analytics() {
   const [, setLocation] = useLocation();
   const { data } = useHydration();
-  const { weeklyData, monthlyData, last7Days, overallStats } = useAnalytics(data);
+  const analytics = useAnalytics(data);
+  const { weeklyData = [], monthlyData = [], last7Days = [], overallStats } = analytics;
   const [activeTab, setActiveTab] = useState('weekly');
 
   const colors = {
