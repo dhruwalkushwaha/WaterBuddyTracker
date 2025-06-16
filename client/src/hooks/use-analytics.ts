@@ -51,8 +51,6 @@ export function useAnalytics(data: HydrationData) {
 
   // Weekly analytics
   const weeklyData = useMemo(() => {
-    if (!allData || allData.length === 0) return [];
-    
     const weeks: WeeklyStats[] = [];
     const now = new Date();
     
@@ -92,8 +90,6 @@ export function useAnalytics(data: HydrationData) {
 
   // Monthly analytics
   const monthlyData = useMemo(() => {
-    if (!allData || allData.length === 0) return [];
-    
     const months: MonthlyStats[] = [];
     const now = new Date();
     

@@ -6,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import Home from "@/pages/home";
 import Analytics from "@/pages/analytics";
-import Performance from "@/pages/performance";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,7 +13,6 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/analytics" component={Analytics} />
-      <Route path="/performance" component={Performance} />
       <Route component={NotFound} />
     </Switch>
   );

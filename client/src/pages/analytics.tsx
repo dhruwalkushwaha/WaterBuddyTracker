@@ -12,17 +12,7 @@ import { useLocation } from 'wouter';
 export default function Analytics() {
   const [, setLocation] = useLocation();
   const { data } = useHydration();
-  const analytics = useAnalytics(data);
-  const weeklyData = analytics.weeklyData || [];
-  const monthlyData = analytics.monthlyData || [];
-  const last7Days = analytics.last7Days || [];
-  const overallStats = analytics.overallStats || {
-    totalDays: 0,
-    averageDaily: 0,
-    goalMetPercentage: 0,
-    probioticCompliance: 0,
-    totalWaterConsumed: 0,
-  };
+  const { weeklyData, monthlyData, last7Days, overallStats } = useAnalytics(data);
   const [activeTab, setActiveTab] = useState('weekly');
 
   const colors = {
@@ -142,7 +132,7 @@ export default function Analytics() {
           </TabsList>
           
           <TabsContent value="weekly" className="space-y-4">
-            {weeklyData && weeklyData.length > 0 ? (
+            {weeklyData.length > 0 ? (
               <>
                 {/* Weekly Chart */}
                 <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
@@ -175,7 +165,7 @@ export default function Analytics() {
 
                 {/* Weekly Stats */}
                 <div className="space-y-3">
-                  {Array.isArray(weeklyData) ? weeklyData.map((week, index) => (
+                  {weeklyData.map((week, index) => (
                     <Card key={index} style={{ backgroundColor: 'var(--bg-secondary)' }}>
                       <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-2">
@@ -205,7 +195,7 @@ export default function Analytics() {
                         </div>
                       </CardContent>
                     </Card>
-                  )) : null}
+                  ))}
                 </div>
               </>
             ) : (
@@ -222,7 +212,7 @@ export default function Analytics() {
           </TabsContent>
           
           <TabsContent value="monthly" className="space-y-4">
-            {monthlyData && monthlyData.length > 0 ? (
+            {monthlyData.length > 0 ? (
               <>
                 {/* Monthly Chart */}
                 <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
@@ -245,7 +235,7 @@ export default function Analytics() {
 
                 {/* Monthly Stats */}
                 <div className="space-y-3">
-                  {Array.isArray(monthlyData) ? monthlyData.map((month, index) => (
+                  {monthlyData.map((month, index) => (
                     <Card key={index} style={{ backgroundColor: 'var(--bg-secondary)' }}>
                       <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-3">
@@ -280,7 +270,7 @@ export default function Analytics() {
                         </div>
                       </CardContent>
                     </Card>
-                  )) : []}
+                  ))}
                 </div>
               </>
             ) : (
