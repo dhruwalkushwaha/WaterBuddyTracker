@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+export const DayDataSchema = z.object({
+  date: z.string(),
+  waterIntake: z.number(),
+  probioticTaken: z.boolean(),
+  goalMet: z.boolean(),
+});
+
+export type DayData = z.infer<typeof DayDataSchema>;
+
 export const HydrationDataSchema = z.object({
   waterIntake: z.number().default(0),
   dailyGoal: z.number().default(2.0),
@@ -10,6 +19,7 @@ export const HydrationDataSchema = z.object({
   achievements: z.array(z.string()).default([]),
   reminderTime: z.string().default("09:00"),
   theme: z.enum(["light", "dark"]).default("light"),
+  history: z.array(DayDataSchema).default([]),
 });
 
 export type HydrationData = z.infer<typeof HydrationDataSchema>;

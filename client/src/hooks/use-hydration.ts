@@ -12,6 +12,7 @@ const initialData: HydrationData = {
   achievements: [],
   reminderTime: "09:00",
   theme: "light",
+  history: [],
 };
 
 export function useHydration() {
@@ -25,6 +26,31 @@ export function useHydration() {
       setData(prev => {
         let newStreak = prev.streak;
         const newAchievements = [...prev.achievements];
+        const newHistory = [...prev.history];
+        
+        // Save yesterday's data to history if we have any progress
+        if (prev.waterIntake > 0 || prev.probioticTaken) {
+          const yesterdayData = {
+            date: prev.lastDate,
+            waterIntake: prev.waterIntake,
+            probioticTaken: prev.probioticTaken,
+            goalMet: prev.waterIntake >= prev.dailyGoal,
+          };
+          
+          // Remove existing entry for same date if it exists
+          const existingIndex = newHistory.findIndex(day => day.date === prev.lastDate);
+          if (existingIndex >= 0) {
+            newHistory[existingIndex] = yesterdayData;
+          } else {
+            newHistory.push(yesterdayData);
+          }
+          
+          // Keep only last 90 days of history for performance
+          newHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          if (newHistory.length > 90) {
+            newHistory.splice(90);
+          }
+        }
         
         // Check if yesterday's goal was met for streak
         if (prev.waterIntake >= prev.dailyGoal) {
@@ -49,10 +75,11 @@ export function useHydration() {
           lastDate: today,
           streak: newStreak,
           achievements: newAchievements,
+          history: newHistory,
         };
       });
     }
-  }, [data.lastDate, data.waterIntake, data.dailyGoal, data.streak, data.achievements, setData]);
+  }, [data.lastDate, data.waterIntake, data.dailyGoal, data.streak, data.achievements, data.history, setData]);
 
   // Add water intake
   const addWater = useCallback(() => {

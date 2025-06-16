@@ -135,7 +135,7 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="max-w-md mx-auto px-4 py-6 space-y-6">
+        <main className="max-w-md mx-auto px-4 py-6 space-y-6" style={{ minHeight: 'calc(100vh - 140px)' }}>
           {/* Daily Progress Card */}
           <Card className="rounded-2xl shadow-lg transition-all duration-300" style={{ backgroundColor: 'var(--bg-secondary)' }}>
             <CardContent className="p-6">

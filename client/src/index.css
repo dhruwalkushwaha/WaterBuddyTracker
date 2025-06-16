@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
   --background: hsl(0, 0%, 100%);
@@ -81,6 +81,24 @@
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* Pixel 7 optimizations */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    overscroll-behavior: none;
+    /* Performance optimizations */
+    will-change: background-color, color;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Pixel 7 specific safe area handling */
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
   }
 }
 
@@ -110,11 +128,19 @@
   .glass-button {
     transition: all 0.2s ease;
     background: linear-gradient(135deg, var(--water-color) 0%, hsl(207, 90%, 44%) 100%);
+    /* Hardware acceleration for Pixel 7 */
+    transform: translateZ(0);
+    will-change: transform;
   }
   
   .glass-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateZ(0);
     box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  }
+  
+  .glass-button:active {
+    transform: translateY(0) translateZ(0);
+    transition-duration: 0.1s;
   }
   
   .achievement-badge {
