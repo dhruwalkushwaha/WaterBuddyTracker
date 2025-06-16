@@ -175,7 +175,7 @@ export default function Analytics() {
 
                 {/* Weekly Stats */}
                 <div className="space-y-3">
-                  {weeklyData.map((week, index) => (
+                  {Array.isArray(weeklyData) ? weeklyData.map((week, index) => (
                     <Card key={index} style={{ backgroundColor: 'var(--bg-secondary)' }}>
                       <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-2">
@@ -205,7 +205,7 @@ export default function Analytics() {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                  )) : null}
                 </div>
               </>
             ) : (
@@ -245,7 +245,7 @@ export default function Analytics() {
 
                 {/* Monthly Stats */}
                 <div className="space-y-3">
-                  {monthlyData.map((month, index) => (
+                  {Array.isArray(monthlyData) ? monthlyData.map((month, index) => (
                     <Card key={index} style={{ backgroundColor: 'var(--bg-secondary)' }}>
                       <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-3">
@@ -280,7 +280,7 @@ export default function Analytics() {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                  )) : null}
                 </div>
               </>
             ) : (
