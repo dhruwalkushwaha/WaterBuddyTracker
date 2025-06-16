@@ -64,7 +64,7 @@ export default function Home() {
           <div className="max-w-md mx-auto px-4 py-4 flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Droplets className="text-2xl" style={{ color: 'var(--water-color)' }} />
-              <h1 className="text-xl font-bold">Hydrate & Thrive</h1>
+              <h1 className="text-xl font-bold">GoodSip GoodBug</h1>
             </div>
             <div className="flex items-center space-x-3">
               <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
