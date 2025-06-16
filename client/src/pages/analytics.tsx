@@ -12,7 +12,17 @@ import { useLocation } from 'wouter';
 export default function Analytics() {
   const [, setLocation] = useLocation();
   const { data } = useHydration();
-  const { weeklyData, monthlyData, last7Days, overallStats } = useAnalytics(data);
+  const analytics = useAnalytics(data);
+  const weeklyData = analytics.weeklyData || [];
+  const monthlyData = analytics.monthlyData || [];
+  const last7Days = analytics.last7Days || [];
+  const overallStats = analytics.overallStats || {
+    totalDays: 0,
+    averageDaily: 0,
+    goalMetPercentage: 0,
+    probioticCompliance: 0,
+    totalWaterConsumed: 0,
+  };
   const [activeTab, setActiveTab] = useState('weekly');
 
   const colors = {
@@ -132,7 +142,7 @@ export default function Analytics() {
           </TabsList>
           
           <TabsContent value="weekly" className="space-y-4">
-            {weeklyData.length > 0 ? (
+            {weeklyData && weeklyData.length > 0 ? (
               <>
                 {/* Weekly Chart */}
                 <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
@@ -212,7 +222,7 @@ export default function Analytics() {
           </TabsContent>
           
           <TabsContent value="monthly" className="space-y-4">
-            {monthlyData.length > 0 ? (
+            {monthlyData && monthlyData.length > 0 ? (
               <>
                 {/* Monthly Chart */}
                 <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
