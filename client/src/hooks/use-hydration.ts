@@ -6,13 +6,24 @@ const initialData: HydrationData = {
   waterIntake: 0,
   dailyGoal: 2.0,
   glassSize: 250,
-  probioticTaken: false,
   lastDate: new Date().toDateString(),
   streak: 0,
   achievements: [],
-  reminderTime: "09:00",
   theme: "light",
   history: [],
+  medications: [
+    {
+      id: "goodbug",
+      name: "GoodBug",
+      dosage: "1 pill",
+      frequency: "once",
+      times: ["09:00"],
+      color: "#8B5CF6",
+      icon: "🦠",
+      active: true,
+      notes: "Daily probiotic supplement",
+    }
+  ],
 };
 
 export function useHydration() {
@@ -29,11 +40,11 @@ export function useHydration() {
         const newHistory = [...prev.history];
         
         // Save yesterday's data to history if we have any progress
-        if (prev.waterIntake > 0 || prev.probioticTaken) {
+        if (prev.waterIntake > 0 || prev.medications.length > 0) {
           const yesterdayData = {
             date: prev.lastDate,
             waterIntake: prev.waterIntake,
-            probioticTaken: prev.probioticTaken,
+            medicationsTaken: [],
             goalMet: prev.waterIntake >= prev.dailyGoal,
           };
           
@@ -144,6 +155,41 @@ export function useHydration() {
     });
   }, [data.glassSize, data.waterIntake, data.dailyGoal, data.lastDate, data.probioticTaken, setData]);
 
+  // Subtract water intake
+  const subtractWater = useCallback(() => {
+    const glassAmount = data.glassSize / 1000; // Convert to liters
+    const newIntake = Math.max(data.waterIntake - glassAmount, 0);
+    
+    setData(prev => {
+      const newHistory = [...prev.history];
+      
+      // Update today's data in history
+      const todayData = {
+        date: prev.lastDate,
+        waterIntake: newIntake,
+        probioticTaken: prev.probioticTaken,
+        goalMet: newIntake >= prev.dailyGoal,
+      };
+      
+      const existingIndex = newHistory.findIndex(day => day.date === prev.lastDate);
+      if (existingIndex >= 0) {
+        newHistory[existingIndex] = todayData;
+      } else {
+        newHistory.push(todayData);
+      }
+      
+      if (newIntake < prev.waterIntake) {
+        setShowToast({ message: "Water intake adjusted", type: 'reminder' });
+      }
+      
+      return {
+        ...prev,
+        waterIntake: newIntake,
+        history: newHistory,
+      };
+    });
+  }, [data.glassSize, data.waterIntake, data.lastDate, data.probioticTaken, data.dailyGoal, setData]);
+
   // Toggle probiotic
   const toggleProbiotic = useCallback(() => {
     setData(prev => {
@@ -206,6 +252,7 @@ export function useHydration() {
   return {
     data,
     addWater,
+    subtractWater,
     toggleProbiotic,
     updateSettings,
     showToast,

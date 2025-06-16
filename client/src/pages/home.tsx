@@ -16,7 +16,7 @@ import { Toast, ToastProvider, ToastViewport, ToastDescription } from '@/compone
 
 export default function Home() {
   const { theme, setTheme } = useTheme();
-  const { data, addWater, toggleProbiotic, updateSettings, showToast, setShowToast } = useHydration();
+  const { data, addWater, subtractWater, toggleProbiotic, updateSettings, showToast, setShowToast } = useHydration();
   const { unlockedAchievements } = useAchievements(data.achievements);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [dailyQuote] = useState(getDailyQuote());
@@ -167,16 +167,31 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* Glass Button */}
-              <div className="text-center">
+              {/* Water Control Buttons */}
+              <div className="text-center space-y-3">
                 <Button 
                   onClick={addWater}
-                  className="glass-button px-8 py-4 rounded-2xl text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
+                  className="glass-button w-full px-8 py-4 rounded-2xl text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
                   style={{ background: 'linear-gradient(135deg, var(--water-color) 0%, hsl(207, 90%, 44%) 100%)' }}
                 >
                   <span className="mr-2">+</span>
                   Add Glass ({data.glassSize}ml)
                 </Button>
+                
+                {data.waterIntake > 0 && (
+                  <Button 
+                    onClick={subtractWater}
+                    variant="outline"
+                    className="w-full px-6 py-2 rounded-xl text-sm font-medium border-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    style={{ 
+                      borderColor: 'var(--water-color)', 
+                      color: 'var(--water-color)',
+                    }}
+                  >
+                    <span className="mr-2">−</span>
+                    Remove Glass ({data.glassSize}ml)
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
