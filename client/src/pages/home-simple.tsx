@@ -52,19 +52,39 @@ export default function HomeSimple() {
   const [showToast, setShowToast] = useState<{ message: string; type: string } | null>(null);
   const [pressedButton, setPressedButton] = useState<string | null>(null);
 
-  // Check for new day
+  // Check for new day and save yesterday's data
   const checkNewDay = () => {
     const today = new Date().toDateString();
     if (data.lastDate !== today) {
       setData(prev => {
         let newStreak = prev.streak;
         const newAchievements = [...prev.achievements];
+        const newHistory = [...(prev.history || [])];
         
+        // Save yesterday's data if there was any activity
+        if (prev.waterIntake > 0 || prev.goodbugTaken) {
+          const yesterdayData = {
+            date: prev.lastDate,
+            waterIntake: Number(prev.waterIntake),
+            goodbugTaken: Boolean(prev.goodbugTaken),
+            goalMet: Number(prev.waterIntake) >= Number(prev.dailyGoal),
+          };
+          
+          // Remove existing entry for same date if it exists
+          const existingIndex = newHistory.findIndex(day => day.date === prev.lastDate);
+          if (existingIndex >= 0) {
+            newHistory[existingIndex] = yesterdayData;
+          } else {
+            newHistory.push(yesterdayData);
+          }
+        }
+        
+        // Update streak
         if (prev.waterIntake >= prev.dailyGoal) {
           newStreak += 1;
           if (newStreak === 3 && !prev.achievements.includes('streak_3')) {
             newAchievements.push('streak_3');
-            setShowToast({ message: "Achievement unlocked: 3 Day Streak! 🔥", type: 'achievement' });
+            setShowToast({ message: "Achievement unlocked: 3 Day Streak!", type: 'achievement' });
           }
         } else if (newStreak > 0) {
           newStreak = 0;
@@ -77,6 +97,7 @@ export default function HomeSimple() {
           lastDate: today,
           streak: newStreak,
           achievements: newAchievements,
+          history: newHistory,
         };
       });
     }
