@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --bundle --outfile=dist/index.js",
+    "build": "vite build && esbuild server/index.ts --platform=node --bundle --outfile=dist/index.js --external:@babel/preset-typescript --external:lightningcss",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push"
